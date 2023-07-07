@@ -98,6 +98,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   document.addEventListener('keyup',movePacman)
+
+  // what happens when pacman eats pac dot
+  function eatPacdot() {
+    
+      if(squares[pacmanCurrentIndex].classList.contains("pac-dot")) {
+        squares[pacmanCurrentIndex].classList.remove("pac-dot")
+      }
+      
+  
+  }
+  document.addEventListener('keyup',eatPacdot)
+
+
+
   
   
 });
