@@ -13,7 +13,7 @@
 }
 
 .pac-dot {
-    background-color: green;
+    background-color: black;
     border: 5px solid white;
     box-sizing: border-box;
 }
@@ -23,8 +23,26 @@
     
 }
 .power-pellet {
-    background-color: green;
+    background-color: black;
     border-radius: 10px;
+}
+
+.blinky{
+    background-color: red;
+    border: 0px;
+}
+.pinky{
+    background-color: pink;
+    border: 0px;
+    
+}
+.inky{
+    background-color: cyan;
+    border: 0px;
+}
+.clyde{
+    background-color: orange;
+    border: 0px;
 }
 
 .pac-man {

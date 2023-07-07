@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const grid = document.querySelector(".grid");
   const scoreDisplay = document.getElementById("score");
   const width = 28;
+  var score = 0;
 
   //layout of grid what is in the squares
   const layout = [
@@ -95,21 +96,45 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   squares[pacmanCurrentIndex].classList.add("pac-man")
 
-  }
+  eatPacdot();
 
+  }
   document.addEventListener('keyup',movePacman)
 
+
+
   // what happens when pacman eats pac dot
-  function eatPacdot() {
-    
+  function eatPacdot() { 
       if(squares[pacmanCurrentIndex].classList.contains("pac-dot")) {
+        score++;
+        scoreDisplay.innerHTML=score
         squares[pacmanCurrentIndex].classList.remove("pac-dot")
       }
-      
-  
+    
   }
-  document.addEventListener('keyup',eatPacdot)
 
+
+  class Ghost {
+    constructor(className,startIndex,speed) {
+          this.className=className
+          this.startIndex=startIndex
+          this.speed=speed
+          this.CurrentIndex=startIndex
+          this.timerId=NaN;
+    }
+  } 
+
+  const ghosts = [
+    new Ghost('blinky',348,250),
+    new Ghost('pinky',376,400),
+    new Ghost('inky',351,300),
+    new Ghost('clyde',379,500)
+  ]
+
+  ghosts.forEach((ghost)=>{
+       squares[ghost.CurrentIndex].classList.add(ghost.className)
+       squares[ghost.CurrentIndex].classList.add('ghost')
+  })
 
 
   
