@@ -97,6 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
   squares[pacmanCurrentIndex].classList.add("pac-man")
 
   eatPacdot();
+  powerPelletEaten();
+  // checkForGameOver();
+  // checkForWin();
 
   }
   document.addEventListener('keyup',movePacman)
@@ -113,14 +116,31 @@ document.addEventListener("DOMContentLoaded", () => {
     
   }
 
+  // what happens when pacman eats power pellet
 
+  function powerPelletEaten() {
+    if(squares[pacmanCurrentIndex].classList.contains("power-pellet")) {
+      score+=10;
+      scoreDisplay.innerHTML=score;
+      squares[pacmanCurrentIndex].classList.remove("power-pellet");
+      ghosts.forEach((ghost)=>{ghost.isScared = true})
+      setTimeout(unscaredGhosts,10000)
+    }
+  }
+
+  function unscaredGhosts(){
+    ghosts.forEach((ghost)=>{ghost.isScared = false})
+  }
+
+ // creating a ghost constructor
   class Ghost {
     constructor(className,startIndex,speed) {
           this.className=className
           this.startIndex=startIndex
           this.speed=speed
           this.CurrentIndex=startIndex
-          this.timerId=NaN;
+          this.timerId=NaN
+          this.isScared=false
     }
   } 
 
@@ -131,10 +151,53 @@ document.addEventListener("DOMContentLoaded", () => {
     new Ghost('clyde',379,500)
   ]
 
+  // rendering ghosts
   ghosts.forEach((ghost)=>{
        squares[ghost.CurrentIndex].classList.add(ghost.className)
        squares[ghost.CurrentIndex].classList.add('ghost')
   })
+
+
+  // move all ghosts randomly
+  ghosts.forEach((ghost)=>{moveghost(ghost)})
+
+  // moving the ghosts in random direction
+  function moveghost(ghost) {
+   const directions = [-1,+1,+width,-width];
+   let direction = directions[Math.floor(Math.random()*directions.length)];
+   ghost.timerId = setInterval(()=>{  
+    if(!squares[ghost.CurrentIndex+direction].classList.contains("wall") && !squares[ghost.CurrentIndex+direction].classList.contains("ghost")) {
+      squares[ghost.CurrentIndex].classList.remove(ghost.className,"ghost","scared-ghost");
+      ghost.CurrentIndex+=direction;
+      squares[ghost.CurrentIndex].classList.add(ghost.className,"ghost");
+
+
+    } else{
+      direction = directions[Math.floor(Math.random()*directions.length)];
+    }
+
+    if(ghost.isScared) {
+      squares[ghost.CurrentIndex].classList.add("scared-ghost");
+    }
+    if(ghost.isScared && squares[ghost.CurrentIndex].classList.contains("pac-man")) {
+      squares[ghost.CurrentIndex].classList.remove(ghost.className,"ghost","scared-ghost");
+      ghost.CurrentIndex=ghost.startIndex;
+      score+=100;
+      scoreDisplay.innerHTML=score;
+      squares[ghost.CurrentIndex].classList.add(ghost.className,"ghost");
+    }
+   },ghost.speed)
+
+  }
+
+
+
+
+
+
+
+
+
 
 
   
