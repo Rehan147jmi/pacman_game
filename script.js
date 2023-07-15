@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   eatPacdot();
   powerPelletEaten();
-  // checkForGameOver();
+  checkForGameOver();
   // checkForWin();
 
   }
@@ -161,6 +161,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // move all ghosts randomly
   ghosts.forEach((ghost)=>{moveghost(ghost)})
 
+
+
+
   // moving the ghosts in random direction
   function moveghost(ghost) {
    const directions = [-1,+1,+width,-width];
@@ -186,10 +189,21 @@ document.addEventListener("DOMContentLoaded", () => {
       scoreDisplay.innerHTML=score;
       squares[ghost.CurrentIndex].classList.add(ghost.className,"ghost");
     }
+    checkForGameOver();
    },ghost.speed)
 
   }
 
+   function checkForGameOver() {
+     if(squares[pacmanCurrentIndex].classList.contains("ghost") && !squares[pacmanCurrentIndex].classList.contains("scared-ghost")){
+      ghosts.forEach(ghost=>clearInterval(ghost.timerId));
+      document.removeEventListener("keyup",movePacman);
+      setTimeout(()=>{
+        alert("Game Over")
+      },5000)
+     }
+
+   }
 
 
 
