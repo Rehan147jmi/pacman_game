@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
   eatPacdot();
   powerPelletEaten();
   checkForGameOver();
-  // checkForWin();
+  checkForWin();
 
   }
   document.addEventListener('keyup',movePacman)
@@ -161,8 +161,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // move all ghosts randomly
   ghosts.forEach((ghost)=>{moveghost(ghost)})
 
-
-
+  // function for getting coordinates
+  function getCoordinates(index) {
+    return [index % width,Math.floor(index/width)];
+  }
 
   // moving the ghosts in random direction
   function moveghost(ghost) {
@@ -171,9 +173,36 @@ document.addEventListener("DOMContentLoaded", () => {
    ghost.timerId = setInterval(()=>{  
     if(!squares[ghost.CurrentIndex+direction].classList.contains("wall") && !squares[ghost.CurrentIndex+direction].classList.contains("ghost")) {
       squares[ghost.CurrentIndex].classList.remove(ghost.className,"ghost","scared-ghost");
+
+      // var [ghostX,ghostY] = getCoordinates(ghost.CurrentIndex);
+      // var [pacmanX,pacmanY] = getCoordinates(pacmanCurrentIndex);
+      // var [ghostNewX,ghostNewY] = getCoordinates(ghost.CurrentIndex+direction);
+  
+      // function xCoordCloser(){
+      //   if((ghostNewX-pacmanX)>(ghostX-pacmanX)){
+      //     return true
+      //   } else{
+      //     return false
+      //   }
+      // }
+
+      // function yCoordCloser(){
+      //   if((ghostNewY-pacmanY)>(ghostY-pacmanY)){
+      //     return true
+      //   } else{
+      //     return false
+      //   }
+      // }
+    
+      // if(xCoordCloser() || yCoordCloser()) {
+      //   ghost.CurrentIndex+=direction;
+      // squares[ghost.CurrentIndex].classList.add(ghost.className,"ghost");
+      // } else{
+      //   squares[ghost.CurrentIndex].classList.add(ghost.className,"ghost");
+      //   direction = directions[Math.floor(Math.random()*directions.length)];
+      // }
       ghost.CurrentIndex+=direction;
       squares[ghost.CurrentIndex].classList.add(ghost.className,"ghost");
-
 
     } else{
       direction = directions[Math.floor(Math.random()*directions.length)];
@@ -194,25 +223,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
+ // function for checking game over
    function checkForGameOver() {
      if(squares[pacmanCurrentIndex].classList.contains("ghost") && !squares[pacmanCurrentIndex].classList.contains("scared-ghost")){
       ghosts.forEach(ghost=>clearInterval(ghost.timerId));
       document.removeEventListener("keyup",movePacman);
-      setTimeout(()=>{
-        alert("Game Over")
-      },5000)
+      scoreDisplay.innerHTML="Game Over ! Refresh the page to restart the game"
+      
      }
-
    }
 
-
-
-
-
-
-
-
-
+ // function for checking win 
+   function checkForWin() {
+    if(score>=500){
+      ghosts.forEach(ghost=>clearInterval(ghost.timerId))
+      document.removeEventListener("keyup",movePacman);
+      scoreDisplay.innerHTML = "You Won! Refresh the page to restart the game "
+    }
+   }   
 
   
   
