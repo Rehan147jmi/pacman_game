@@ -1,4 +1,3 @@
-document.addEventListener("DOMContentLoaded", () => {
 
   const grid = document.querySelector(".grid");
   const scoreDisplay = document.getElementById("score");
@@ -18,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
     1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,
     1,1,1,1,1,1,0,1,1,4,4,4,4,4,4,4,4,4,4,1,1,0,1,1,1,1,1,1,
-    1,1,1,1,1,1,0,1,1,4,1,1,1,2,2,1,1,1,4,1,1,0,1,1,1,1,1,1,
+    1,1,1,1,1,1,0,1,1,4,5,5,5,2,2,5,5,5,4,1,1,0,1,1,1,1,1,1,
     1,1,1,1,1,1,0,1,1,4,1,2,2,2,2,2,2,1,4,1,1,0,1,1,1,1,1,1,
     4,4,4,4,4,4,0,0,0,4,1,2,2,2,2,2,2,1,4,0,0,0,4,4,4,4,4,4,
     1,1,1,1,1,1,0,1,1,4,1,2,2,2,2,2,2,1,4,1,1,0,1,1,1,1,1,1,
@@ -73,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let pacmanCurrentIndex = 490;
   squares[pacmanCurrentIndex].classList.add("pac-man")
 
+
   // move pacman 
   function movePacman(e){
     squares[pacmanCurrentIndex].classList.remove("pac-man")
@@ -85,9 +85,9 @@ document.addEventListener("DOMContentLoaded", () => {
       case 38:
         if(pacmanCurrentIndex - width >= 0 && !squares[pacmanCurrentIndex-width].classList.contains("wall") && !squares[pacmanCurrentIndex-width].classList.contains("ghost-lair"))  pacmanCurrentIndex -= width;
         break
-      case 39:
-        if(pacmanCurrentIndex % width < width -1 && !squares[pacmanCurrentIndex+1].classList.contains("wall") && !squares[pacmanCurrentIndex+1].classList.contains("ghost-lair"))  pacmanCurrentIndex += 1;
-        if(pacmanCurrentIndex===391 ) pacmanCurrentIndex-=27
+      case 39:    
+      if(pacmanCurrentIndex % width < width -1 && !squares[pacmanCurrentIndex+1].classList.contains("wall") && !squares[pacmanCurrentIndex+1].classList.contains("ghost-lair"))  pacmanCurrentIndex += 1;
+      if(pacmanCurrentIndex===391 ) pacmanCurrentIndex-=27
         break
       case 40:
         if(pacmanCurrentIndex + width < width*width && !squares[pacmanCurrentIndex+width].classList.contains("wall")  && !squares[pacmanCurrentIndex+width].classList.contains("ghost-lair"))  pacmanCurrentIndex += width;
@@ -145,10 +145,10 @@ document.addEventListener("DOMContentLoaded", () => {
   } 
 
   const ghosts = [
-    new Ghost('blinky',348,250),
-    new Ghost('pinky',376,400),
-    new Ghost('inky',351,300),
-    new Ghost('clyde',379,500)
+    new Ghost('blinky',348,200),
+    new Ghost('pinky',376,200),
+    new Ghost('inky',351,200),
+    new Ghost('clyde',379,200)
   ]
 
   // rendering ghosts
@@ -174,35 +174,37 @@ document.addEventListener("DOMContentLoaded", () => {
     if(!squares[ghost.CurrentIndex+direction].classList.contains("wall") && !squares[ghost.CurrentIndex+direction].classList.contains("ghost")) {
       squares[ghost.CurrentIndex].classList.remove(ghost.className,"ghost","scared-ghost");
 
-      // var [ghostX,ghostY] = getCoordinates(ghost.CurrentIndex);
-      // var [pacmanX,pacmanY] = getCoordinates(pacmanCurrentIndex);
-      // var [ghostNewX,ghostNewY] = getCoordinates(ghost.CurrentIndex+direction);
+      var [ghostX,ghostY] = getCoordinates(ghost.CurrentIndex);
+      var [pacmanX,pacmanY] = getCoordinates(pacmanCurrentIndex);
+      var [ghostNewX,ghostNewY] = getCoordinates(ghost.CurrentIndex+direction);
   
-      // function xCoordCloser(){
-      //   if((ghostNewX-pacmanX)>(ghostX-pacmanX)){
-      //     return true
-      //   } else{
-      //     return false
-      //   }
-      // }
+      function xCoordCloser(){
+        if ((Math.abs(ghostNewX - pacmanX)) < (Math.abs(ghostX - pacmanX))) {
+          return true;
 
-      // function yCoordCloser(){
-      //   if((ghostNewY-pacmanY)>(ghostY-pacmanY)){
-      //     return true
-      //   } else{
-      //     return false
-      //   }
-      // }
+       } else {
+           return false;
+       }
+      }
+
+      function yCoordCloser(){
+        if ((Math.abs(ghostNewY - pacmanY)) < (Math.abs(ghostY - pacmanY))) {
+          return true;
+
+       } else {
+           return false;
+       }
+      }
     
-      // if(xCoordCloser() || yCoordCloser()) {
-      //   ghost.CurrentIndex+=direction;
-      // squares[ghost.CurrentIndex].classList.add(ghost.className,"ghost");
-      // } else{
-      //   squares[ghost.CurrentIndex].classList.add(ghost.className,"ghost");
-      //   direction = directions[Math.floor(Math.random()*directions.length)];
-      // }
-      ghost.CurrentIndex+=direction;
+      if(xCoordCloser() || yCoordCloser()) {
+        ghost.CurrentIndex+=direction;
       squares[ghost.CurrentIndex].classList.add(ghost.className,"ghost");
+      } else{
+        squares[ghost.CurrentIndex].classList.add(ghost.className,"ghost");
+        direction = directions[Math.floor(Math.random()*directions.length)];
+      }
+      // ghost.CurrentIndex+=direction;
+      // squares[ghost.CurrentIndex].classList.add(ghost.className,"ghost");
 
     } else{
       direction = directions[Math.floor(Math.random()*directions.length)];
@@ -235,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
  // function for checking win 
    function checkForWin() {
-    if(score>=500){
+    if(score>=800){
       ghosts.forEach(ghost=>clearInterval(ghost.timerId))
       document.removeEventListener("keyup",movePacman);
       scoreDisplay.innerHTML = "You Won! Refresh the page to restart the game "
@@ -244,4 +246,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
   
   
-});
+
